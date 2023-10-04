@@ -171,10 +171,10 @@ def user_profile():
                     'height', 'weight', 'goal', 'target_weight'})
                 if temp is not None:
                     mongo.db.profile.update({'email': email},
-                                            {'$set': {'weight': temp['weight'],
-                                                      'height': temp['height'],
-                                                      'goal': temp['goal'],
-                                                      'target_weight': temp['target_weight']}})
+                                            {'$set': {'weight': weight,
+                                                      'height': height,
+                                                      'goal': goal,
+                                                      'target_weight': target_weight}})
                 else:
                     mongo.db.profile.insert({'email': email,
                                              'height': height,
