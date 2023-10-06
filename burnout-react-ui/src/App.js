@@ -46,8 +46,8 @@ function App() {
         {/* new line start*/}
         <p>To get your profile details: </p><button onClick={getData}>Click me</button>
         {profileData && <div>
-              <p>Profile name: {respone.data.profile_name}</p>
-              <p>About me: {response.data.about_me}</p>
+              <p>Profile name: {profileData.profile_name}</p>
+              <p>About me: {profileData.data.about_me}</p>
             </div>
         }
          {/* end of new line */}
