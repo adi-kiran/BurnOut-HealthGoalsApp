@@ -3,3 +3,5 @@ package-lock.json
 __pycache__
 .idea
 .DS_Store
+backend/.venv
+backend/__pycache__
