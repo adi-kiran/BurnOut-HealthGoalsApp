@@ -6,6 +6,8 @@
   "dependencies": {
     "@emotion/react": "latest",
     "@emotion/styled": "latest",
+    "@material-ui/core": "^4.12.4",
+    "@material-ui/icons": "^4.11.3",
     "@mui/icons-material": "^5.14.12",
     "@mui/material": "latest",
     "@testing-library/jest-dom": "^5.17.0",
