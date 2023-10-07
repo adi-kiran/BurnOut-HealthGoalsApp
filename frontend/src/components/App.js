@@ -5,7 +5,7 @@ import Router from './Router';
 function App(props) {
   return (
     <>
-      <Router></Router>
+      <Router />    
     </>
   );
 }
