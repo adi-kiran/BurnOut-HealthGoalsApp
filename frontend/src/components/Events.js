@@ -16,8 +16,6 @@ import Typography from '@mui/material/Typography';
 import Container from '@mui/material/Container';
 import Link from '@mui/material/Link';
 import Modal from '@mui/material/Modal';
-import IconButton from "@mui/material/IconButton";
-import SearchIcon from "@mui/icons-material/Search";
 import TextField from "@mui/material/TextField";
 import { createTheme, ThemeProvider } from '@mui/material/styles';
 import Header from './Header';
@@ -34,6 +32,30 @@ function Copyright() {
         </Typography>
     );
 }
+
+const SearchBar = ({ setSearchQuery }) => (
+    <form>
+        <TextField
+            id="search-bar"
+            className="text"
+            onInput={(e) => {
+                setSearchQuery(e.target.value);
+            }}
+            label="Enter an event"
+            variant="outlined"
+            placeholder="Search..."
+            size="small"
+        />
+    </form>
+);
+
+const filterData = (query, cards) => {
+    if (!query) {
+        return cards;
+    } else {
+        return cards.filter((e) => e.title.toLowerCase().includes(query.toLowerCase()));
+    }
+};
 
 const cards = [{
     title: "Yoga",
@@ -98,6 +120,9 @@ export default function Events() {
         setIsModalOpen(false);
     };
 
+    const [searchQuery, setSearchQuery] = useState("");
+    const eventsFiltered = filterData(searchQuery, cards);
+
     return (
         <ThemeProvider theme={defaultTheme}>
             <CssBaseline />
@@ -123,23 +148,24 @@ export default function Events() {
                             Events
                         </Typography>
                         <Typography variant="h5" align="center" color="text.secondary" paragraph>
-                            Start your wellness journey with us today!
-                            Discover yoga, swimming, gym, and more. Click "More Information" for event details, or add your own to our vibrant community.
+                            Start your wellness journey with us today! Discover yoga, swimming, gym, and more. Click "More Information" for event details, or add your own to our vibrant community.
                         </Typography>
-                        {/* <Stack
+                        <Stack
                             sx={{ pt: 4 }}
                             direction="row"
                             spacing={2}
                             justifyContent="center"
                         >
-                            <Button variant="contained">Create your own event</Button>
-                        </Stack> */}
+                            {/* <Button variant="contained">Create your own event</Button> */}
+                            <SearchBar searchQuery={searchQuery} setSearchQuery={setSearchQuery}/>
+                        </Stack>
                     </Container>
                 </Box>
+                
                 <Container sx={{ py: 8 }} maxWidth="md">
                     {/* End hero unit */}
                     <Grid container spacing={4}>
-                        {cards.map((event) => (
+                        {eventsFiltered.map((event) => (
                             <Grid item key={event} xs={12} sm={6} md={4}>
                                 <Card
                                     sx={{ height: '100%', display: 'flex', flexDirection: 'column' }}
