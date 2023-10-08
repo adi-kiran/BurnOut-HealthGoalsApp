@@ -11,11 +11,12 @@ import Button from "@mui/material/Button";
 import Tooltip from "@mui/material/Tooltip";
 import MenuItem from "@mui/material/MenuItem";
 import WhatshotIcon from "@material-ui/icons/Whatshot";
+import axios from "axios";
 
-const mainPages = { Home: "/home", Events: "/events", ContactUs: "/contactus" };
+const mainPages = { Home: "/", Events: "/events" , 'Contact Us': "/contactus"};
 const userPages = { Profile: "/profile" };
 
-function Header() {
+function Header(props) {
   const [userMenuToggle, setUserMenuToggle] = useState(null);
 
   const handleOpenUserMenu = (event) => {
@@ -28,21 +29,20 @@ function Header() {
 
   const handleLogOut = () => {
     handleCloseUserMenu();
-    // TO DO : Fix with actual logout logic here.
-    // axios({
-    //   method: "POST",
-    //   url: "/logout",
-    // })
-    //   .then((response) => {
-    //     props.token();
-    //   })
-    //   .catch((error) => {
-    //     if (error.response) {
-    //       console.log(error.response);
-    //       console.log(error.response.status);
-    //       console.log(error.response.headers);
-    //     }
-    //   });
+    axios({
+      method: "POST",
+      url: "/logout",
+    })
+      .then((response) => {
+        props.token();
+      })
+      .catch((error) => {
+        if (error.response) {
+          console.log(error.response);
+          console.log(error.response.status);
+          console.log(error.response.headers);
+        }
+      });
   }
 
   return (
@@ -58,7 +58,7 @@ function Header() {
               variant="h6"
               noWrap
               component="a"
-              href="#FIX-PATH"
+              href="/"
               sx={{
                 mr: 2,
                 display: "flex",

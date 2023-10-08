@@ -1,13 +1,14 @@
 import React, { useEffect, useReducer, useState, Redirect } from 'react';
 import { Switch, Route } from 'react-router-dom';
-import SignUp from './SignUp';
-import SignIn from './SignIn';
+import SignUp from './authentication/SignUp';
+import SignIn from './authentication/SignIn';
 import ContactUs from './ContactUs';
 import Events from './Events';
 import Header from './Header';
 import Profile from './Profile';
-import useToken from './useToken';
-import checkUserToken from './CheckUserToken';
+import Home from './Home';
+import useToken from './authentication/useToken';
+import checkUserToken from './authentication/CheckUserToken';
 
 
 function Router() {
@@ -21,16 +22,19 @@ function Router() {
   return (
     <Switch>
       <Route exact path="/">
-        {!!token ? <Profile /> : <SignIn setToken={setToken} />}
+        {!!token ? <Home token={removeToken}/> : <SignIn setToken={setToken} />}
       </Route>
       <Route path="/signup">
         <SignUp />
       </Route>
       <Route path="/profile" >
-        {!!token ? <Profile /> : <SignIn setToken={setToken} />}
+        {!!token ? <Profile token={removeToken}/> : <SignIn setToken={setToken} />}
       </Route>
-      <Route path="/logout">
-        {!!token ? <Header token={removeToken} /> : <SignIn setToken={setToken} />}
+      <Route path="/contactus">
+        <ContactUs token={removeToken} ></ContactUs>
+      </Route>
+      <Route path="/events">
+        <Events token={removeToken} ></Events>
       </Route>
       <Route path="/contactus">
         <ContactUs></ContactUs>
