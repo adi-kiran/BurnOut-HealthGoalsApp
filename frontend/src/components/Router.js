@@ -9,7 +9,7 @@ import Profile from './Profile';
 import Home from './Home';
 import useToken from './authentication/useToken';
 import checkUserToken from './authentication/CheckUserToken';
-
+import UserCaloriesPage from './UserCaloriesPage';
 
 function Router() {
 
@@ -29,6 +29,9 @@ function Router() {
       </Route>
       <Route path="/profile" >
         {!!token ? <Profile token={removeToken}/> : <SignIn setToken={setToken} />}
+      </Route>
+      <Route path="/home">
+        <UserCaloriesPage />
       </Route>
       <Route path="/contactus">
         <ContactUs token={removeToken} ></ContactUs>

@@ -1,11 +1,15 @@
-import React from 'react';
+import React from "react";
 
-import Router from './Router';
+import Router from "./Router";
+import { LocalizationProvider } from "@mui/x-date-pickers/LocalizationProvider";
+import { AdapterDayjs } from "@mui/x-date-pickers/AdapterDayjs";
 
 function App(props) {
   return (
     <>
-      <Router />    
+      <LocalizationProvider dateAdapter={AdapterDayjs}>
+        <Router />
+      </LocalizationProvider>
     </>
   );
 }
