@@ -12,7 +12,7 @@ import Tooltip from "@mui/material/Tooltip";
 import MenuItem from "@mui/material/MenuItem";
 import WhatshotIcon from "@material-ui/icons/Whatshot";
 
-const mainPages = { Home: "/home", Events: "/events" };
+const mainPages = { Home: "/home", Events: "/events", ContactUs: "/contactus" };
 const userPages = { Profile: "/profile" };
 
 function Header() {
