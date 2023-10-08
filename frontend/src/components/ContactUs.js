@@ -1,10 +1,13 @@
 import React from 'react';
 import { Container, Typography, Link, Divider } from '@mui/material';
+import Header from './Header';
 
 const ContactUs = () => {
   return (
+    <div>
+    <Header></Header>
     <Container maxWidth="sm" style={{ textAlign: 'center', marginTop: '50px' }}>
-    <Divider style={{ marginBottom: '20px' }} /> 
+    {/* <Divider style={{ marginBottom: '20px' }} />  */}
       <Typography variant="h4" component="div" style={{ textTransform: 'uppercase'  }}>
         Contact the team
       </Typography>
@@ -18,6 +21,7 @@ const ContactUs = () => {
         We will respond to you as soon as we can!
       </Typography>
     </Container>
+    </div>
   );
 };
 
