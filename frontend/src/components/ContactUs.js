@@ -1,17 +1,22 @@
 import React from 'react';
-import { Container, Typography, Link, Divider } from '@mui/material';
+import { Container, Typography, Link } from '@mui/material';
 import Header from './Header';
 
 const ContactUs = (props) => {
   return (
     <div>
       <Header {...props}/>
-      <Container maxWidth="sm" style={{ textAlign: 'center', marginTop: '50px' }}>
-        <Divider style={{ marginBottom: '20px' }} />
-        <Typography variant="h4" component="div" style={{ textTransform: 'uppercase' }}>
-          Contact the team
-        </Typography>
-        <Typography variant="body1" style={{ marginTop: '20px' }}>
+      <Container maxWidth="sm" style={{ textAlign: 'center', marginTop: '60px' }}>
+        <Typography
+                            component="h1"
+                            variant="h2"
+                            align="center"
+                            color="text.primary"
+                            gutterBottom
+                        >
+                            Contact Us
+                        </Typography>
+        <Typography variant="h5" align="center" color="text.secondary" paragraph>
           Use the email below to contact the BurnOut development team. It's a group mailbox that is accessed by the core team. Feel free to reach out to us for any questions, feedback, or inquiries related to our application.
         </Typography>
         <Typography variant="body1" style={{ marginTop: '20px' }}>
