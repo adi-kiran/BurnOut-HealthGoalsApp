@@ -52,7 +52,7 @@ const cards = [{
 },
 {
     title: "Swimming",
-    imageUrl: "../static/img/yoga.jpg",
+    imageUrl: "../static/img/swim.jpeg",
     description: "Swimming is an activity that burns lots of calories, is easy on the joints, supports your weight, builds muscular strength and endurance.",
     eventInfo: "There are plenty of reasons to swim! Here's a list that should get you motivated. <br> <strong><b>Low impact</b></strong><br>There's no ground impact when you swim, and so you protect the joints from stress and strain. Water aerobics classes are also desirable for this reason because even if you do jump and hit the bottom of the pool,  you do so with less force because you're buoyant in the water.<br><br> <strong><b>Can be continued for a lifetime</b></strong><br><br> <strong><b>Builds muscle mass</b></strong><br>In a study of men who completed an eight-week swimming program, there was a 23.8% increase in the triceps muscle (the back of the arm).<br><br> <strong><b>Builds cardiorespiratory fitness</b></strong><br>Swimming improves endurance. In one study of sedentary middle-aged men and women who did swim training for 12 weeks, maximal oxygen consumption improved 10% and stroke volume (the amount of blood pumped with each beat which indicates heart strength) improved as much as 18%.",
     eventLocation: "Carmichael Pool",
