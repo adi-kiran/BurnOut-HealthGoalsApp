@@ -11,50 +11,29 @@ import {
   TextField,
   Avatar,
   IconButton,
-  CardActions
+  CardActions,
 } from "@mui/material";
-import AccountCircleIcon from '@mui/icons-material/AccountCircle';
+import AccountCircleIcon from "@mui/icons-material/AccountCircle";
 import Box from "@mui/material/Box";
-import SaveIcon from '@mui/icons-material/Save';
-import FitnessCenterIcon from '@mui/icons-material/FitnessCenter';
+import WhatshotIcon from "@material-ui/icons/Whatshot";
+import FitnessCenterIcon from "@mui/icons-material/FitnessCenter";
 
 const weightCardStyles = {
-  card: {
-    maxWidth: 500,
-    margin: '16px', // 
-  },
   weightContainer: {
-    display: 'flex',
-    flexDirection: 'column',
-    alignItems: 'center',
+    display: "flex",
+    flexDirection: "column",
+    alignItems: "center",
   },
   weightText: {
-    fontSize: '2rem',
-    fontWeight: 'bold',
-  },
-  inputField: {
-    margin: '8px', // Add margin to the bottom of the input field
-    padding: '8px', // Add padding to the input field
-  },
-  saveButton: {
-    padding: '8px 16px', // Add padding to the Save button (vertical padding 8px, horizontal padding 16px)
-  },
-  mainCard: {
-    gridArea: 'input',
-    display: 'flex',
-    justifyContent: 'center', // Center horizontally
-    alignItems: 'center', // Center vertically
-    elevation: 5,
+    fontSize: "2rem",
+    fontWeight: "bold",
   },
 };
 
 function Profile(initialName, initialAge, initialWeight, initialHeight, props) {
-
-
-
-  const [currentWeight, setCurrentWeight] = useState('150 lbs'); 
-  const [currentHeight, setCurrentHeight] = useState('180'); 
-  const [currentGoal, setCurrentGoal] = useState('Bulk'); 
+  const [currentWeight, setCurrentWeight] = useState("150");
+  const [currentHeight, setCurrentHeight] = useState("180");
+  const [currentGoal, setCurrentGoal] = useState("Bulk");
   const [editableWeight, setEditableWeight] = useState(currentWeight);
   const [editableHeight, setEditableHeight] = useState(currentHeight);
   const [editableGoal, setEditableGoal] = useState(currentGoal);
@@ -64,7 +43,6 @@ function Profile(initialName, initialAge, initialWeight, initialHeight, props) {
     setCurrentHeight(editableHeight);
     setCurrentGoal(editableGoal);
   };
-
 
   initialName = "John Doe";
   initialAge = 30;
@@ -118,18 +96,35 @@ function Profile(initialName, initialAge, initialWeight, initialHeight, props) {
             gridTemplateColumns: "repeat(4, 1fr)",
             gap: 2,
             gridTemplateRows: "auto",
-            gridTemplateAreas: `"profile  input input input"`,
-            paddingTop: "2rem"
+            gridTemplateAreas: `"profile  input input input"
+                                "profile  . . ."`,
+            paddingTop: "2rem",
           }}
         >
           <Card sx={{ gridArea: "profile" }} elevation={5}>
-            <CardContent>
+            <CardContent
+              sx={{
+                display: "flex",
+                justifyContent: "center",
+                flexDirection: "column",
+              }}
+            >
               {/* TODO : make profile pictures updatable */}
-              <Box display="flex" justifyContent="center" alignItems="center" flexDirection="column">
+              <Box
+                sx={{
+                  display: "flex",
+                  justifyContent: "space-around",
+                  alignItems: "center",
+                  flexDirection: "column",
+                  paddingBottom: "5px",
+                }}
+              >
                 <Avatar sx={{ width: 100, height: 100 }}>
                   <AccountCircleIcon sx={{ width: 70, height: 70 }} />
                 </Avatar>
-                <Typography variant="h5" mt={2}>Profile</Typography>
+                <Typography variant="h5" mt={2}>
+                  Profile
+                </Typography>
               </Box>
               <Box mb={2}>
                 <TextField
@@ -164,93 +159,119 @@ function Profile(initialName, initialAge, initialWeight, initialHeight, props) {
                 />
               </Box>
               <Button variant="contained" color="primary" onClick={handleSave}>
-                Save
+                Update  
               </Button>
             </CardContent>
           </Card>
-          <Card style={weightCardStyles.mainCard} sx={{ gridArea: "input" }} elevation={5}>
-            <Box
+          <Card sx={{ gridArea: "input" }} elevation={5}>
+            <CardHeader
+            title={"Your Goals"}
+            subheader={"Update your goals here"}
+            />
+            {/* <CardContent
+              sx={{
+                display: "flex",
+                justifyContent: "center",
+                flexDirection: "column",
+              }}
+            > */}
+            <CardContent
               sx={{
                 display: "grid",
                 gridTemplateColumns: "repeat(3, 1fr)",
                 gap: 2,
                 gridTemplateRows: "auto",
-                gridTemplateAreas: `"weight height goal"
-                                    "save save save"`,
-                paddingTop: "2rem"
+                gridTemplateAreas: `"targetWeight targetCalories targetGoal"
+                                    ". saveButton ."`,
+                paddingTop: "2rem",
               }}
             >
-              <Card sx={{ gridArea: "weight" }} elevation={2} style={weightCardStyles.card}>
-                <CardContent>
-                  <div style={weightCardStyles.weightContainer}>
-                    <IconButton color="primary" aria-label="weighing scale icon">
-                      <FitnessCenterIcon fontSize="large" />
-                    </IconButton>
-                    <Typography style={weightCardStyles.weightText}>
-                      {currentWeight}
-                    </Typography>
-                  </div>
-                </CardContent>
-                <TextField
-                  label="Edit Weight"
-                  variant="outlined"
-                  fullWidth
-                  value={editableWeight}
-                  onChange={(e) => setEditableWeight(e.target.value)}
-                />
-              </Card>
-              <Card sx={{ gridArea: "height" }} elevation={2} style={weightCardStyles.card}>
-                <CardContent>
-                  <div style={weightCardStyles.weightContainer}>
-                    <IconButton color="primary" aria-label="weighing scale icon">
-                      <FitnessCenterIcon fontSize="large" />
-                    </IconButton>
-                    <Typography style={weightCardStyles.weightText}>
-                      {currentHeight}
-                    </Typography>
-                  </div>
-                </CardContent>
-                <TextField
-                  label="Edit Weight"
-                  variant="outlined"
-                  fullWidth
-                  value={editableHeight}
-                  onChange={(e) => setEditableHeight(e.target.value)}
-                />
-              </Card>
-              <Card sx={{ gridArea: "goal" }} elevation={2} style={weightCardStyles.Card}>
-                <CardContent>
-                  <div style={weightCardStyles.weightContainer}>
-                    <IconButton color="primary" aria-label="weighing scale icon">
-                      <FitnessCenterIcon fontSize="large" />
-                    </IconButton>
-                    <Typography style={weightCardStyles.weightText}>
-                      {currentGoal}
-                    </Typography>
-                  </div>
-                </CardContent>
-                <TextField
-                  label="Edit Weight"
-                  variant="outlined"
-                  fullWidth
-                  value={editableGoal}
-                  onChange={(e) => setEditableGoal(e.target.value)}
-                />
-              </Card>
-              <CardActions>
-              <card sx={{ gridArea: "save" }} elevation={2}>       
-               <Button
-                // style={weightCardStyles.saveButton}
+                <Card
+                  sx={{ gridArea: "targetWeight" }}
+                  elevation={2}
+                >
+                  <CardContent>
+                    <div style={weightCardStyles.weightContainer}>
+                      <IconButton
+                        color="primary"
+                        aria-label="weighing scale icon"
+                      >
+                        <FitnessCenterIcon fontSize="large" />
+                      </IconButton>
+                      <Typography style={weightCardStyles.weightText}>
+                        {currentWeight}
+                      </Typography>
+                    </div>
+                  </CardContent>
+                  <TextField
+                    label="Target Weight"
+                    variant="outlined"
+                    fullWidth
+                    value={editableWeight}
+                    onChange={(e) => setEditableWeight(e.target.value)}
+                  />
+                </Card>
+                <Card
+                  sx={{ gridArea: "targetCalories" }}
+                  elevation={2}
+                >
+                  <CardContent>
+                    <div style={weightCardStyles.weightContainer}>
+                      <IconButton
+                        color="primary"
+                        aria-label="weighing scale icon"
+                      >
+                        <WhatshotIcon fontSize="large" />
+                      </IconButton>
+                      <Typography style={weightCardStyles.weightText}>
+                        {currentHeight}
+                      </Typography>
+                    </div>
+                  </CardContent>
+                  <TextField
+                    label="Daily Calories Burn Goal"
+                    variant="outlined"
+                    fullWidth
+                    value={editableHeight}
+                    onChange={(e) => setEditableHeight(e.target.value)}
+                  />
+                </Card>
+                <Card
+                  sx={{ gridArea: "targetGoal" }}
+                  elevation={2}
+                >
+                  <CardContent>
+                    <div style={weightCardStyles.weightContainer}>
+                      <IconButton
+                        color="primary"
+                        aria-label="weighing scale icon"
+                      >
+                        <FitnessCenterIcon fontSize="large" />
+                      </IconButton>
+                      <Typography style={weightCardStyles.weightText}>
+                        {currentGoal}
+                      </Typography>
+                    </div>
+                  </CardContent>
+                  <TextField
+                    label="Goal"
+                    variant="outlined"
+                    fullWidth
+                    value={editableGoal}
+                    onChange={(e) => setEditableGoal(e.target.value)}
+                  />
+                </Card>
+              <Button
+                sx={{ gridArea: "saveButton" }}
                 variant="contained"
                 color="primary"
-                startIcon={<SaveIcon />}
+                // startIcon={<SaveIcon />}
                 onClick={handleSaveInput}
+                maxWidth
               >
-                Save
-              </Button></card>
-
-            </CardActions>
-            </Box>
+                Update
+              </Button>
+            </CardContent>
           </Card>
         </Box>
       </Container>
