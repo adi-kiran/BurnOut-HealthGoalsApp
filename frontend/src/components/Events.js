@@ -1,5 +1,5 @@
 import * as React from 'react';
-import { useState } from 'react'; 
+import { useState } from 'react';
 import Button from '@mui/material/Button';
 import Card from '@mui/material/Card';
 import CardActions from '@mui/material/CardActions';
@@ -15,7 +15,7 @@ import Modal from '@mui/material/Modal';
 import TextField from "@mui/material/TextField";
 import { createTheme, ThemeProvider } from '@mui/material/styles';
 import Header from './Header';
-
+import axios from 'axios';
 
 const SearchBar = ({ setSearchQuery }) => (
     <form>
@@ -127,21 +127,48 @@ const defaultTheme = createTheme();
 
 export default function Events(props) {
 
+    const [enrollmentStatus, setEnrollmentStatus] = useState({});
+
     // Create state for modal visibility
     const [eventModals, setEventModals] = useState({});
-    
+
     // Function to open and close the modal
     const handleOpenModal = (eventTitle) => {
         setEventModals({ ...eventModals, [eventTitle]: true });
     };
-    
+
     const handleCloseModal = (eventTitle) => {
         setEventModals({ ...eventModals, [eventTitle]: false });
-    };    
-    
+    };
+
     const [searchQuery, setSearchQuery] = useState("");
 
     const eventsFiltered = filterData(searchQuery, cards);
+
+    const handleEnroll = (eventTitle) => {
+        const userEmail = "user@example.com"; // Get user email here
+    
+        axios.post('/enroll', {
+            email: userEmail,
+            eventTitle: eventTitle
+        })
+            .then(response => {
+                console.log(response.data);
+                if (response.data.status === "Data saved successfully") {
+                    setEnrollmentStatus(prevStatus => ({
+                        ...prevStatus,
+                        [eventTitle]: true
+                    }));
+                }
+            })
+            .catch(error => {
+                console.error("An error occurred while sending the data: ", error);
+                setEnrollmentStatus(prevStatus => ({
+                    ...prevStatus,
+                    [eventTitle]: false
+                }));
+            });
+    };
 
     return (
         <ThemeProvider theme={defaultTheme}>
@@ -196,7 +223,7 @@ export default function Events(props) {
                                             pt: '56.25%',
                                         }}
                                         image={event.imageUrl}
-                                        //image="https://source.unsplash.com/random?wallpapers"
+                                    //image="https://source.unsplash.com/random?wallpapers"
                                     />
                                     <CardContent sx={{ flexGrow: 1 }}>
                                         <Typography gutterBottom variant="h5" component="h2">
@@ -207,7 +234,7 @@ export default function Events(props) {
                                         </Typography>
                                     </CardContent>
                                     <CardActions>
-                                    <Button size="small" onClick={() => handleOpenModal(event.title)}>More Information</Button>
+                                        <Button size="small" onClick={() => handleOpenModal(event.title)}>More Information</Button>
                                     </CardActions>
                                 </Card>
                                 <Modal open={eventModals[event.title]} onClose={() => handleCloseModal(event.title)}>
@@ -227,12 +254,17 @@ export default function Events(props) {
                                         <Typography variant="h6" component="div">
                                             <strong>{event.title}</strong>
                                         </Typography>
-                                        <Typography sx={{ mt: 2 }}> {event.eventInfo.split('\n')} </Typography>
+                                        <Typography sx={{ mt: 2 }}> {event.eventInfo} </Typography>
                                         <Typography sx={{ mt: 2 }}><strong>Location:</strong> {event.eventLocation}</Typography>
                                         <Typography sx={{ mt: 2 }}><strong>Date:</strong> {event.eventDate}</Typography>
                                         <Typography sx={{ mt: 2 }}><strong>Time:</strong> {event.eventTime}</Typography>
-                                        <Button>Enroll</Button>
+                                        <Button onClick={() => handleEnroll(event.title)} disabled={enrollmentStatus[event.title]}>{enrollmentStatus[event.title] ? "Enrolled" : "Enroll"}</Button>
                                         <Button onClick={() => handleCloseModal(event.title)}>Close</Button>
+                                        {enrollmentStatus[event.title] && (
+                                            <Typography variant="body2" color="green" component="p">
+                                                You have successfully enrolled for the event!
+                                            </Typography>
+                                        )}
                                     </Box>
                                 </Modal>
                             </Grid>
