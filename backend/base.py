@@ -31,6 +31,28 @@ def logout():
     unset_jwt_cookies(response)
     return response
 
+@api.route('/events', methods=['GET'])
+def get_events():
+    events_collection = mongo.db.events
+    events = list(events_collection.find({}))
+    for event in events:
+        event["_id"] = str(event["_id"]) # Convert ObjectId to string
+    return jsonify(events)
+
+@api.route('/is-enrolled', methods=['GET'])
+def is_enrolled():
+    data = request.json
+    userEmail = data['email']
+    eventTitle = data['eventTitle']
+
+    enrollment = mongo.db.user.find_one({"email": userEmail, "eventTitle": eventTitle})
+
+    if enrollment:
+        return jsonify({"isEnrolled": True})
+    else:
+        return jsonify({"isEnrolled": False})
+
+
 @api.route('/enroll', methods=['POST'])
 def enroll_event():
     data = request.get_json()  # get data from POST request
