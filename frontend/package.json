@@ -2,7 +2,7 @@
   "name": "burnout-react-ui",
   "version": "0.1.0",
   "private": true,
-  "proxy": "http://localhost:5000",
+  "proxy": "http://localhost:5000/",
   "dependencies": {
     "@emotion/react": "latest",
     "@emotion/styled": "latest",
