@@ -39,7 +39,7 @@ def get_events():
         event["_id"] = str(event["_id"]) # Convert ObjectId to string
     return jsonify(events)
 
-@api.route('/is-enrolled', methods=['GET'])
+@api.route('/is-enrolled', methods=['POST'])
 def is_enrolled():
     data = request.json
     userEmail = data['email']
