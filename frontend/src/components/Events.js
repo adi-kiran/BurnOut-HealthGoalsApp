@@ -145,7 +145,7 @@ export default function Events(props) {
                             Events
                         </Typography>
                         <Typography variant="h5" align="center" color="text.secondary" paragraph>
-                            Start your wellness journey with us today! Discover yoga, swimming, gym, and more. Click "More Information" for event details, or add your own to our vibrant community.
+                            Start your wellness journey with us today! Discover yoga, swimming, gym, and more. Click "More Information" for event details.
                         </Typography>
                         <Stack
                             sx={{ pt: 4 }}
@@ -185,7 +185,7 @@ export default function Events(props) {
                                         </Typography>
                                     </CardContent>
                                     <CardActions>
-                                        <Button size="small" onClick={() => handleOpenModal(event.title)}>More Information</Button>
+                                        <Button size="small" onClick={() => handleOpenModal(event.title)}>Learn More</Button>
                                     </CardActions>
                                 </Card>
                                 <Modal open={eventModals[event.title]} onClose={() => handleCloseModal(event.title)}>
