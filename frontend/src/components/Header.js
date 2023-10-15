@@ -12,6 +12,8 @@ import Tooltip from "@mui/material/Tooltip";
 import MenuItem from "@mui/material/MenuItem";
 import WhatshotIcon from "@material-ui/icons/Whatshot";
 import axios from "axios";
+import useToken from './authentication/useToken';
+import { updateState } from "../burnoutReducer";
 
 const mainPages = { Home: "/", Events: "/events" , 'Contact Us': "/contactus"};
 const userPages = { Profile: "/profile" };
@@ -26,7 +28,7 @@ function Header(props) {
   const handleCloseUserMenu = () => {
     setUserMenuToggle(null);
   };
-
+  const { saveToken, getToken, token, removeToken } = useToken();
   const handleLogOut = () => {
     handleCloseUserMenu();
     axios({
@@ -34,7 +36,12 @@ function Header(props) {
       url: "/logout",
     })
       .then((response) => {
-        props.token();
+        removeToken();
+        const loggedOutState = {
+          loggedIn: false,
+          token: null,
+        };
+        props.dispatch(updateState(loggedOutState));
       })
       .catch((error) => {
         if (error.response) {

@@ -1,50 +1,66 @@
-import React, { useEffect, useReducer, useState, Redirect } from 'react';
-import { Switch, Route } from 'react-router-dom';
-import SignUp from './authentication/SignUp';
-import SignIn from './authentication/SignIn';
-import ContactUs from './ContactUs';
-import Events from './Events';
-import Header from './Header';
-import Profile from './Profile';
-import Home from './Home';
+import React, { useEffect, useReducer, useState, Redirect } from "react";
+import { Switch, Route } from "react-router-dom";
+import SignUp from "./authentication/SignUp";
+import SignIn from "./authentication/SignIn";
+import ContactUs from "./ContactUs";
+import Events from "./Events";
+import Header from "./Header";
+import Profile from "./Profile";
+import Home from "./Home";
+import burnoutReducer, { updateState } from "../burnoutReducer";
+import PrivateRoute from "./PrivateRoute";
 import useToken from './authentication/useToken';
-import checkUserToken from './authentication/CheckUserToken';
-import UserCaloriesPage from './UserCaloriesPage';
+
+const initialState = {
+  loggedIn: false,
+  token: null,
+  snackbar: {
+    open: false,
+    message: "",
+    severity: "",
+  },
+};
 
 function Router() {
+  const { saveToken, getToken, token, removeToken } = useToken();
 
-  const { token, removeToken, setToken } = useToken();
+  const [state, dispatch] = useReducer(burnoutReducer, initialState);
+  useEffect(() => {
+    let loggedInUserJWTtoken = getToken();
+    if(loggedInUserJWTtoken){
+      let logInState = {
+        loggedIn: true,
+        token: token
+      };
+      dispatch(updateState(logInState));
+    }
+  }, []);
+  // const { setupToken, token, removeToken  } = useToken();
 
-  const userHasToken = checkUserToken(false);
+  // const userHasToken = checkUserToken(false);
 
-  console.log(!!token)
+  // console.log(!!token)
 
   return (
     <Switch>
-      <Route exact path="/">
-        {!!token ? <Home token={removeToken}/> : <SignIn setToken={setToken} />}
-      </Route>
       <Route path="/signup">
         <SignUp />
       </Route>
-      <Route path="/profile" >
-        {!!token ? <Profile token={removeToken}/> : <SignIn setToken={setToken} />}
+      <Route path="/signin">
+        <SignIn dispatch={dispatch}/>
       </Route>
-      <Route path="/home">
-        <UserCaloriesPage />
-      </Route>
-      <Route path="/contactus">
-        <ContactUs token={removeToken} ></ContactUs>
-      </Route>
-      <Route path="/events">
-        <Events token={removeToken} ></Events>
-      </Route>
-      <Route path="/contactus">
-        <ContactUs></ContactUs>
-      </Route>
-      <Route path="/events">
-        <Events></Events>
-      </Route>
+      <PrivateRoute state={state} dispatch={dispatch} path="/">
+        <Home state={state} dispatch={dispatch} />
+      </PrivateRoute>
+      <PrivateRoute state={state} dispatch={dispatch} path="/profile">
+        <Profile state={state} dispatch={dispatch} />
+      </PrivateRoute>
+      <PrivateRoute state={state} dispatch={dispatch} path="/contactus">
+        <ContactUs state={state} dispatch={dispatch} />
+      </PrivateRoute>
+      <PrivateRoute state={state} dispatch={dispatch} path="/events">
+        <Events state={state} dispatch={dispatch} />
+      </PrivateRoute>
     </Switch>
   );
 }
