@@ -12,15 +12,17 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v2
-      - name: Install Python 3.9.9
+      - name: Install Python 3.7.17
         uses: actions/setup-python@v1
         with:
-          python-version: 3.9.9
+          python-version: 3.7.17
       - name: Install dependencies
+        working-directory: ./backend
         run: |
           pip install -r requirements.txt
           echo requirements installed
+        
       - name: Run tests
+        working-directory: ./backend
         run: |
-          cd tests
-          python -m unittest test
+          python -m unittest test_api.py

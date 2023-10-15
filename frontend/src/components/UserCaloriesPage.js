@@ -39,6 +39,7 @@ import {
   CartesianGrid,
   Legend,
 } from "recharts";
+import axios from "axios";
 
 function UserCaloriesPage(props) {
   const [todayCaloriesConsumed, setTodayCaloriesConsumed] = useState(500);
@@ -340,32 +341,32 @@ function UserCaloriesPage(props) {
   const [intakeDate, setIntakeDate] = useState(dayjs());
   const handleAddCalorieIntake = (e) => {
     console.log("Intake", intakeItem, intakeCalories, intakeDate);
+    e.preventDefault()
+    console.log(props.state.token)
     // TO DO: UPDATE THE API CALL
-    // axios({
-    //   method: "POST",
-    //   url: "/UPDATE_THIS",
-    //   headers: {
-    //     Authorization: "Bearer " + props.token,
-    //   },
-    //   data: {
-    //     intakeFoodItem: intakeItem,
-    //     intakeCalories: intakeCalories,
-    //     intakeDate: intakeDate,
-    //   },
-    // })
-    //   .then((response) => {
-    //     const res = response.data;
-    //     res.access_token && props.setToken(res.access_token);
-    //     // We should be getting the updated total calories consumed for today here as a response, so we can update the graph
-    //     // Set the updated value and possibly update the graph
-    //   })
-    //   .catch((error) => {
-    //     if (error.response) {
-    //       console.log(error.response);
-    //       console.log(error.response.status);
-    //       console.log(error.response.headers);
-    //     }
-    //   });
+    axios({
+      method: "POST",
+      url: "/caloriesConsumed",
+      headers: {
+        Authorization: "Bearer " + props.state.token,
+      },
+      data: {
+        intakeFoodItem: intakeItem,
+        intakeCalories: intakeCalories,
+        intakeDate: intakeDate,
+      },
+    })
+      .then((response) => {
+        const res = response.data;
+        console.log(res)
+      })
+      .catch((error) => {
+        if (error.response) {
+          console.log(error.response);
+          console.log(error.response.status);
+          console.log(error.response.headers);
+        }
+      });
   };
 
   const [burntoutCalories, setBurntoutCalories] = useState("");

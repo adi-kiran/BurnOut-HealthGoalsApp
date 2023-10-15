@@ -88,7 +88,6 @@ function Profile(initialName, initialAge, initialWeight, initialHeight, props) {
 
   return (
     <>
-      <Header {...props} />
       <Container maxWidth>
         <Box
           sx={{

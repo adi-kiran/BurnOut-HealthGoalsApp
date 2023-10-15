@@ -102,7 +102,7 @@ def register():
                 username = request.form.get('username')
                 email = request.form.get('email')
                 password = request.form.get('password')
-                mongo.db.user.insert({'name': username, 'email': email, 'pwd': bcrypt.hashpw(
+                mongo.db.user.insert_one({'name': username, 'email': email, 'pwd': bcrypt.hashpw(
                     password.encode("utf-8"), bcrypt.gensalt())})
             flash(f'Account created for {form.username.data}!', 'success')
             return redirect(url_for('home'))
