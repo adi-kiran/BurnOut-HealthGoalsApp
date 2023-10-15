@@ -1,5 +1,5 @@
 import unittest
-from base import api, mongo
+from base import api
 
 class APITestCase(unittest.TestCase):
     
