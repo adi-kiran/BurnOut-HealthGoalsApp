@@ -1,8 +1,6 @@
 import * as React from 'react';
-import { useState } from 'react'; // Import useState
-import AppBar from '@mui/material/AppBar';
+import { useState, useEffect } from 'react';
 import Button from '@mui/material/Button';
-import CameraIcon from '@mui/icons-material/PhotoCamera';
 import Card from '@mui/material/Card';
 import CardActions from '@mui/material/CardActions';
 import CardContent from '@mui/material/CardContent';
@@ -11,93 +9,122 @@ import CssBaseline from '@mui/material/CssBaseline';
 import Grid from '@mui/material/Grid';
 import Stack from '@mui/material/Stack';
 import Box from '@mui/material/Box';
-import Toolbar from '@mui/material/Toolbar';
 import Typography from '@mui/material/Typography';
 import Container from '@mui/material/Container';
-import Link from '@mui/material/Link';
-import Modal from '@mui/material/Modal'
+import Modal from '@mui/material/Modal';
+import TextField from "@mui/material/TextField";
 import { createTheme, ThemeProvider } from '@mui/material/styles';
 import Header from './Header';
+import axios from 'axios';
 
-function Copyright() {
-    return (
-        <Typography variant="body2" color="text.secondary" align="center">
-            {'Copyright © '}
-            <Link color="inherit" href="https://mui.com/">
-                Your Website
-            </Link>{' '}
-            {new Date().getFullYear()}
-            {'.'}
-        </Typography>
-    );
-}
+const SearchBar = ({ setSearchQuery }) => (
+    <form>
+        <TextField
+            id="search-bar"
+            className="text"
+            onInput={(e) => {
+                setSearchQuery(e.target.value);
+            }}
+            label="Enter an event"
+            variant="outlined"
+            placeholder="Search..."
+            size="small"
+        />
+    </form>
+);
 
-const cards = [{
-    title: "Yoga",
-    imageUrl: "../static/img/yoga.jpg",
-    description: "New to Yoga? You are at the right place! Learn easy yoga poses to build strength, flexibility and mental clarity."
-},
-{
-    title: "Swimming",
-    imageUrl: "../static/img/yoga.jpg",
-    description: "Swimming is an activity that burns lots of calories, is easy on the joints, supports your weight, builds muscular strength and endurance."
-},
-{
-    title: "Abs Smash",
-    imageUrl: "../static/img/yoga.jpg",
-    description: "Whether your goal is a six-pack or just a little more definition around your midsection, we will help get you there!"
-},
-{
-    title: "Walk Fitness",
-    imageUrl: "../static/img/yoga.jpg",
-    description: "Join us to get the best of the walk workouts to burn more calories than a stroll around the park."
-},
-{
-    title: "Belly Burner",
-    imageUrl: "../static/img/yoga.jpg",
-    description: "Join Sasha for a 30-minute no-equipment workout that will work on that stubborn belly fat."
-},
-{
-    title: "HRX Fitness",
-    imageUrl: "../static/img/yoga.jpg",
-    description: "Shake it off and groove to some fun tracks with Tom and his squad in this dance fitness session!"
-},
-{
-    title: "Dance Fitness",
-    imageUrl: "../static/img/yoga.jpg",
-    description: "It's time to push yourself to the limit! Join us for some intense workout sessions."
-},
-{
-    title: "Core Conditioning",
-    imageUrl: "../static/img/yoga.jpg",
-    description: "Develop core muscle strenngth that improves posture and contributes to a trimmer appearance."
-},
-{
-    title: "Gym",
-    imageUrl: "../static/img/yoga.jpg",
-    description: "A collection of Dumbbells workouts by skilled trainers specific to particular muscle group."
-}];
+const filterData = (query, cards) => {
+    if (!query) {
+        return cards;
+    } else {
+        return cards.filter((e) => e.title.toLowerCase().includes(query.toLowerCase()));
+    }
+};
 
-// TODO remove, this demo shouldn't need to reset the theme.
 const defaultTheme = createTheme();
 
 export default function Events(props) {
 
-    // Step 2: Create state for modal visibility
-    const [isModalOpen, setIsModalOpen] = useState(false);
+    const [events, setEvents] = useState([]);
 
-    // Step 3: Function to open and close the modal
-    const handleOpenModal = () => {
-        setIsModalOpen(true);
+    const [enrollmentStatus, setEnrollmentStatus] = useState({});
+
+    // Create state for modal visibility
+    const [eventModals, setEventModals] = useState({});
+
+    // Function to open and close the modal
+    const handleOpenModal = (eventTitle) => {
+        const userEmail = "user@example.com"; // Get user email here
+
+    axios.post('/is-enrolled', {
+        email: userEmail,
+        eventTitle: eventTitle
+    })
+        .then(response => {
+            if (response.data.isEnrolled) {
+                setEnrollmentStatus(prevStatus => ({
+                    ...prevStatus,
+                    [eventTitle]: true
+                }));
+            } else {
+                setEnrollmentStatus(prevStatus => ({
+                    ...prevStatus,
+                    [eventTitle]: false
+                }));
+            }
+            setEventModals({ ...eventModals, [eventTitle]: true });
+        })
+        .catch(error => {
+            console.error("An error occurred while checking enrollment status: ", error);
+        });
     };
 
-    const handleCloseModal = () => {
-        setIsModalOpen(false);
+    const handleCloseModal = (eventTitle) => {
+        setEventModals({ ...eventModals, [eventTitle]: false });
     };
+
+    const [searchQuery, setSearchQuery] = useState("");
+
+    const eventsFiltered = filterData(searchQuery, events);
+
+    useEffect(() => {
+        fetch('/events')
+        .then(response => response.json())
+        .then(data => setEvents(data))
+        .catch(error => console.error('Error fetching events:', error));
+    }, []);
+
+    const handleEnroll = (eventTitle) => {
+        const userEmail = "user@example.com"; // Get user email here
+    
+        axios.post('/enroll', {
+            email: userEmail,
+            eventTitle: eventTitle
+        })
+            .then(response => {
+                console.log(response.data);
+                if (response.data.status === "Data saved successfully") {
+                    setEnrollmentStatus(prevStatus => ({
+                        ...prevStatus,
+                        [eventTitle]: true
+                    }));
+                }
+            })
+            .catch(error => {
+                console.error("An error occurred while sending the data: ", error);
+                setEnrollmentStatus(prevStatus => ({
+                    ...prevStatus,
+                    [eventTitle]: false
+                }));
+            });
+    };
+
+    
 
     return (
         <ThemeProvider theme={defaultTheme}>
-            <Header {...props}/>
+            <CssBaseline />
+            <Header {...props} />
             <main>
                 {/* Hero unit */}
                 <Box
@@ -118,23 +145,24 @@ export default function Events(props) {
                             Events
                         </Typography>
                         <Typography variant="h5" align="center" color="text.secondary" paragraph>
-                            Start your wellness journey with us today!
-                            Discover yoga, swimming, gym, and more. Click "More Information" for event details, or add your own to our vibrant community.
+                            Start your wellness journey with us today! Discover yoga, swimming, gym, and more. Click "More Information" for event details, or add your own to our vibrant community.
                         </Typography>
-                        {/* <Stack
+                        <Stack
                             sx={{ pt: 4 }}
                             direction="row"
                             spacing={2}
                             justifyContent="center"
                         >
-                            <Button variant="contained">Create your own event</Button>
-                        </Stack> */}
+                            {/* <Button variant="contained">Create your own event</Button> */}
+                            <SearchBar searchQuery={searchQuery} setSearchQuery={setSearchQuery} />
+                        </Stack>
                     </Container>
                 </Box>
+
                 <Container sx={{ py: 8 }} maxWidth="md">
                     {/* End hero unit */}
                     <Grid container spacing={4}>
-                        {cards.map((event) => (
+                        {eventsFiltered.map((event) => (
                             <Grid item key={event} xs={12} sm={6} md={4}>
                                 <Card
                                     sx={{ height: '100%', display: 'flex', flexDirection: 'column' }}
@@ -145,8 +173,8 @@ export default function Events(props) {
                                             // 16:9
                                             pt: '56.25%',
                                         }}
-                                        //image={event.imageUrl}
-                                        image="https://source.unsplash.com/random?wallpapers"
+                                        image={event.imageUrl}
+                                    //image="https://source.unsplash.com/random?wallpapers"
                                     />
                                     <CardContent sx={{ flexGrow: 1 }}>
                                         <Typography gutterBottom variant="h5" component="h2">
@@ -157,53 +185,44 @@ export default function Events(props) {
                                         </Typography>
                                     </CardContent>
                                     <CardActions>
-                                        <Button size="small" onClick={handleOpenModal}>More Info</Button>
+                                        <Button size="small" onClick={() => handleOpenModal(event.title)}>More Information</Button>
                                     </CardActions>
                                 </Card>
+                                <Modal open={eventModals[event.title]} onClose={() => handleCloseModal(event.title)}>
+                                    <Box
+                                        sx={{
+                                            position: 'absolute',
+                                            top: '50%',
+                                            left: '50%',
+                                            transform: 'translate(-50%, -50%)',
+                                            width: '50%',
+                                            bgcolor: 'background.paper',
+                                            border: '2px solid #000',
+                                            boxShadow: 24,
+                                            p: 4,
+                                        }}
+                                    >
+                                        <Typography variant="h6" component="div">
+                                            <strong>{event.title}</strong>
+                                        </Typography>
+                                        <Typography sx={{ mt: 2 }}> {event.eventInfo} </Typography>
+                                        <Typography sx={{ mt: 2 }}><strong>Location:</strong> {event.eventLocation}</Typography>
+                                        <Typography sx={{ mt: 2 }}><strong>Date:</strong> {event.eventDate}</Typography>
+                                        <Typography sx={{ mt: 2 }}><strong>Time:</strong> {event.eventTime}</Typography>
+                                        <Button onClick={() => handleEnroll(event.title)} disabled={enrollmentStatus[event.title]}>{enrollmentStatus[event.title] ? "Enrolled" : "Enroll"}</Button>
+                                        <Button onClick={() => handleCloseModal(event.title)}>Close</Button>
+                                        {enrollmentStatus[event.title] && (
+                                            <Typography variant="body2" color="green" component="p">
+                                                You have successfully enrolled for the event!
+                                            </Typography>
+                                        )}
+                                    </Box>
+                                </Modal>
                             </Grid>
                         ))}
                     </Grid>
-                    <Modal open={isModalOpen} onClose={handleCloseModal}>
-                        <Box
-                            sx={{
-                                position: 'absolute',
-                                top: '50%',
-                                left: '50%',
-                                transform: 'translate(-50%, -50%)',
-                                width: 400,
-                                bgcolor: 'background.paper',
-                                border: '2px solid #000',
-                                boxShadow: 24,
-                                p: 4,
-                            }}
-                        >
-                            <Typography variant="h6" component="div">
-                                Modal Content
-                            </Typography>
-                            <Typography sx={{ mt: 2 }}>This is your modal content.</Typography>
-                            <Button onClick={handleCloseModal}>Close Modal</Button>
-                        </Box>
-                    </Modal>
                 </Container>
-                {/* Step 4: Render the modal */}
-
             </main>
-            {/* Footer */}
-            <Box sx={{ bgcolor: 'background.paper', p: 6 }} component="footer">
-                <Typography variant="h6" align="center" gutterBottom>
-                    Footer
-                </Typography>
-                <Typography
-                    variant="subtitle1"
-                    align="center"
-                    color="text.secondary"
-                    component="p"
-                >
-                    Something here to give the footer a purpose!
-                </Typography>
-                <Copyright />
-            </Box>
-            {/* End footer */}
         </ThemeProvider>
     );
 }

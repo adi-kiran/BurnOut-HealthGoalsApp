@@ -39,6 +39,12 @@ function Router() {
       <Route path="/events">
         <Events token={removeToken} ></Events>
       </Route>
+      <Route path="/contactus">
+        <ContactUs></ContactUs>
+      </Route>
+      <Route path="/events">
+        <Events></Events>
+      </Route>
     </Switch>
   );
 }
